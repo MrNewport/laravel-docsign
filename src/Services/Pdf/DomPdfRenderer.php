@@ -17,7 +17,8 @@ class DomPdfRenderer implements PdfRendererInterface
     public function renderPdf(string $html): string
     {
         $dompdfOptions = new Options();
-        $dompdfOptions->setIsRemoteEnabled(true);
+        $dompdfOptions->setIsRemoteEnabled((bool) ($this->options['remote_enabled'] ?? false));
+        $dompdfOptions->setIsPhpEnabled(false);
 
         $dompdf = new Dompdf($dompdfOptions);
         $dompdf->setPaper(

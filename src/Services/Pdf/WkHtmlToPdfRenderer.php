@@ -20,7 +20,8 @@ class WkHtmlToPdfRenderer implements PdfRendererInterface
 
         $this->snappy = new Pdf($wkhtmlPath);
 
-        $this->snappy->setOption('enable-local-file-access', true);
+        $this->snappy->setOption('disable-local-file-access', true);
+        $this->snappy->setOption('disable-javascript', true);
 
         if (!empty($options['paper'])) {
             $this->snappy->setOption('page-size', $options['paper']);

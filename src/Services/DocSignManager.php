@@ -27,10 +27,12 @@ class DocSignManager
         $html = $templateEngine->render($document->data ?? [], $document->title ?? 'Document');
         $pdfBinary = $pdfRenderer->renderPdf($html);
 
-        $filename = ($document->title ?: 'doc') . '_' . uniqid() . '.pdf';
+        $filename = 'documents/' . \Illuminate\Support\Str::uuid() . '.pdf';
         $disk = config('docsign.storage_disk', 'local');
 
-        Storage::disk($disk)->put($filename, $pdfBinary);
+        if (!Storage::disk($disk)->put($filename, $pdfBinary)) {
+            throw new \RuntimeException('Unable to store the generated document.');
+        }
         $path = Storage::disk($disk)->url($filename);
 
         $document->file_path = $path;
@@ -45,12 +47,14 @@ class DocSignManager
         $defaultProvider = config('docsign.signature.default', 'local');
         $provider = $this->resolveSignatureProvider($defaultProvider);
 
+        $result = $provider->createSignatureRequest($document, $signers);
+
         $document->signature_provider = $defaultProvider;
         $document->signers = $signers;
         $document->status = 'signing';
         $document->save();
 
-        return $provider->createSignatureRequest($document, $signers);
+        return $result;
     }
 
     public function handleCallback(string $providerKey, Request $request): void

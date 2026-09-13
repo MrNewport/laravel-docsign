@@ -28,10 +28,11 @@ class DocSignServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        Route::group(['namespace' => 'MrNewport\LaravelDocSign\Services'], function () {
-            Route::post('/docsign/callback/{provider}', 'RouteCallbacks@signatureCallback')
+        if (config('docsign.callbacks.enabled', false)) {
+            Route::post('/docsign/callback/{provider}', [\MrNewport\LaravelDocSign\Services\RouteCallbacks::class, 'signatureCallback'])
+                ->middleware(config('docsign.callbacks.middleware', []))
                 ->name('docsign.callback');
-        });
+        }
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'docsign');
     }

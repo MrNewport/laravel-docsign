@@ -2,6 +2,8 @@
 
 return [
 
+    'callbacks' => ['enabled' => false, 'middleware' => []],
+
     'pdf_renderer' => 'dompdf',
     'pdf_options' => [
         'paper' => 'A4',
@@ -14,6 +16,7 @@ return [
         'default' => 'local',
         'providers' => [
             'local' => [
+                'enabled' => false,
                 'class' => \MrNewport\LaravelDocSign\Services\Signature\LocalSignatureProvider::class,
                 'callback_url' => '/docsign/local/callback'
             ],

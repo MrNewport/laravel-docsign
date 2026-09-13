@@ -9,6 +9,6 @@ class BladeTemplateEngine implements TemplateEngineInterface
     public function render(array $data, string $title = ''): string
     {
         $viewName = $data['_template'] ?? 'docsign::default';
-        return View::make($viewName, $data)->render();
+        return View::make($viewName, ['title' => $title] + $data)->render();
     }
 }

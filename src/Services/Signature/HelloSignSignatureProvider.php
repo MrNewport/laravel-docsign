@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use MrNewport\LaravelDocSign\Models\Document;
 
 /** Reserved adapter name. Bind a verified provider implementation before use. */
-class DocuSignSignatureProvider implements SignatureProviderInterface
+class HelloSignSignatureProvider implements SignatureProviderInterface
 {
     public function createSignatureRequest(Document $document, array $signers): array
     {
