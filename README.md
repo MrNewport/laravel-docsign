@@ -2,6 +2,8 @@
 
 Trusted Blade/Twig rendering, PDF engines, persisted Document records and signature-provider contracts. PDF generation works independently; built-in external signing adapters explicitly throw, and the local opt-in adapter is a state demonstration.
 
+**[Interactive workshop](https://matthewnewport.com/packages/laravel-docsign/lab)** — Try guided examples in your browser.
+
 ```sh
 composer require mrnewport/laravel-docsign:^2.0
 ```
