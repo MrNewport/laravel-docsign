@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use MrNewport\LaravelDocSign\Models\Document;
 use MrNewport\LaravelDocSign\Services\Pdf\PdfRendererInterface;
 use MrNewport\LaravelDocSign\Services\Signature\SignatureProviderInterface;
+use MrNewport\LaravelDocSign\Services\Signature\DocuSignPrivateSignatureProvider;
+use MrNewport\LaravelDocSign\Services\Signature\PrivateSignatureProviderInterface;
 use MrNewport\LaravelDocSign\Services\Template\TemplateEngineInterface;
 
 class DocSignManager
@@ -61,6 +63,16 @@ class DocSignManager
     {
         $provider = $this->resolveSignatureProvider($providerKey);
         $provider->processCallback($request);
+    }
+
+    /** Explicit private-byte adapter; legacy unscoped Document routes remain disabled. */
+    public function privateSignatureProvider(string $provider): PrivateSignatureProviderInterface
+    {
+        if ($provider !== 'docusign') {
+            throw new \InvalidArgumentException('This private signature provider is unavailable.');
+        }
+
+        return $this->app->make(DocuSignPrivateSignatureProvider::class);
     }
 
     protected function resolveTemplateEngine(): TemplateEngineInterface
